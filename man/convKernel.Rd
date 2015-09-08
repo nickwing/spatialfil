@@ -13,7 +13,8 @@ convKernel(sigma = 1.4, k = c("gaussian", "LoG", "sharpen", "edge"))
 3x3 convolution matrix for sharping the edges and \code{edge} for a 3x3 convolution matrix to trace the edges}
 }
 \value{
-A matrix with convolution kernel with size varying according the value of \code{sigma}
+A matrix with convolution kernel with size varying according the value of \code{sigma} in case of
+\code{gaussian} or \code{LoG} option selected
 }
 \description{
 This function creates the convolution kernel for applying a filter to an array/matrix

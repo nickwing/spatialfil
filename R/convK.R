@@ -11,7 +11,8 @@
 #' Laplacian of Gaussian or \emph{LoG}) is needed to reduce the effect of high frequency noise that can affect the signal
 #' distribution. \emph{Edge} kernel is a 3x3 cnvolution kernel used to enhance the edges of the matrix. \emph{Sharpen} enhance the detail
 #' (but also the noise) in original dataset
-#' @return A matrix with convolution kernel with size varying according the value of \code{sigma}
+#' @return A matrix with convolution kernel with size varying according the value of \code{sigma} in case of
+#' \code{gaussian} or \code{LoG} option selected
 #' @export
 #' @examples # creates a convolution kernel with Gaussian function and sigma = 1.4
 #'  K <- convKernel(sigma = 1.4, k = 'gaussian')
@@ -32,4 +33,20 @@ convKernel <- function(sigma = 1.4, k = c('gaussian','LoG','sharpen','edge')) {
   if (k=='sharpen') M <- matrix(data = c(0,-1,0,-1,5,-1,0,-1,0), nrow = 3)
   if (k=='edge') M <- matrix(data = c(0,1,0,1,-4,1,0,1,0), nrow = 3)
   return(M)
+}
+
+
+#' Function for applying convolution kernel to a matrix or array
+#' @description This function applies the a convolution kernel based filter to a \code{matrix} or \code{array} object type.
+#' @param x An object of class \code{matrix} or \code{array}
+#' @param kernel A \code{matrix} containing the values chosen as convolution kernel
+#' @details The application of a convolution kernel over a 2D matrix dataset allows to apply functions as smoothing or edge detection.
+#' The aim of this function is to filter 2D matrices in order to help signal finding across (images-derived) data. It is also possible to
+#' filter 3D arrays considering them as slices of a series of images to be processed. Higher dimensions arrays are not allowed.
+#' The \code{kernel} parameter is a simple \bold{square matrix} with an odd number of rows/columns, that can be pre-calculated by using
+#' the function \code{\link{convKernel}}. Not square matrices or matrices with even number of rows/columns will exit an error.
+#' @return An object with the same size of \code{x} containing data processed by convolution kernel
+#' @export
+applyFilter <- function(x, kernel) {
+
 }
