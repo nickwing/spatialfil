@@ -4,6 +4,6 @@
 #include <R.h>
 #include <Rinternals.h>
 
-void applyLernel(double *dataInput, double *Kernel, int *Krow, int *Kcol, int *Nrow, int *Ncol, int *Nslices, double *dataOutput) {
+void applyKernel(double *dataInput, double *Kernel, int *Krow, int *Kcol, int *Nrow, int *Ncol, int *Nslices, double *dataOutput) {
 
 }
