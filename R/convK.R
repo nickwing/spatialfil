@@ -67,7 +67,22 @@ applyFilter <- function(x, kernel) {
   Ncol <- dim(x)[2]
   if (class(x)=='matrix') Nslices <- 1 else Nslices <- dim(x)[3]
   dataOutput <- x
-  result <- .C('applyKernel', as.double(x), as.double(kernel), as.integer(extralines),
+  # building the index matrix for transporting the kernel on the array or matrix
+  kindex <- c()
+  for (n in -extralines:extralines)  # index for columns
+    for (m in -extralines:extralines)  # index for rows
+      kindex <- c(kindex, n*Nrow + m)
+
+  result <- .C('applyKernel', as.double(x), as.double(kernel), as.integer(extralines), as.integer(kindex),
                as.integer(Nrow), as.integer(Ncol), as.integer(Nslices), as.double(dataOutput))
-  return(x)
+  if (class(x)=='matrix') {
+    output <- matrix(data = result[[8]], nrow = Nrow)
+    # resize matrix to original size
+    output <- output[(extralines+1):(nrow(output) - extralines), (extralines+1):(ncol(output) - extralines)]
+  }
+  if (class(x)=='array')  {
+    output <- array(data = result[[8]], dim = c(Nrow, Ncol, Nslices))
+    output <- output[(extralines+1):(nrow(output) - extralines), (extralines+1):(ncol(output) - extralines),]
+  }
+  return(output)
 }
