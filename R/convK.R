@@ -46,7 +46,28 @@ convKernel <- function(sigma = 1.4, k = c('gaussian','LoG','sharpen','edge')) {
 #' The \code{kernel} parameter is a simple \bold{square matrix} with an odd number of rows/columns, that can be pre-calculated by using
 #' the function \code{\link{convKernel}}. Not square matrices or matrices with even number of rows/columns will exit an error.
 #' @return An object with the same size of \code{x} containing data processed by convolution kernel
+#' @import abind
+#' @useDynLib spacialfil
 #' @export
 applyFilter <- function(x, kernel) {
-
+  # prepare matrix if x is matrix by adding required extra lines
+  # number of extralines to be added to matrix and arrays (extraplanes)
+  extralines <- dim(kernel)[1] %/% 2
+  # now resizes array or matrix adding as new extralines (or planes) as the length
+  # of half side of kernel - 1 (the center pixel)
+  if (class(x)=='matrix') {
+    for (n in 1:extralines) x <- cbind(x[,1], x, x[,ncol(x)])
+    for (n in 1:extralines) x <- rbind(x[1,], x, x[nrow(x),])
+  }
+  if (class(x)=='array') {
+    for (n in 1:extralines) x <- abind(x[,1,], x, x[,dim(x)[2],], along = 2)
+    for (n in 1:extralines) x <- abind(x[1,,], x, x[dim(x)[1],,], along = 1)
+  }
+  Nrow <- dim(x)[1]
+  Ncol <- dim(x)[2]
+  if (class(x)=='matrix') Nslices <- 1 else Nslices <- dim(x)[3]
+  dataOutput <- x
+  result <- .C('applyKernel', as.double(x), as.double(kernel), as.integer(extralines),
+               as.integer(Nrow), as.integer(Ncol), as.integer(Nslices), as.double(dataOutput))
+  return(x)
 }

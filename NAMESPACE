@@ -2,3 +2,5 @@
 
 export(applyFilter)
 export(convKernel)
+import(abind)
+useDynLib(spacialfil)
