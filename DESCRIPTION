@@ -1,4 +1,4 @@
-Package: spacialfil
+Package: spatialfil
 Type: Package
 Title: Package for applying 2D convolution kernel filters to matrices or arrays
 Version: 0.1
