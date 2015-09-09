@@ -1,4 +1,4 @@
-#' Function for creating convolution kernel for Gaussian and Laplacian of Gaussian (LoG) filter
+#' Function for creating convolution kernel for different filters
 #' @description This function creates the convolution kernel for applying a filter to an array/matrix
 #' @param sigma The \code{numeric} value of standard deviation for the Gaussian or LoG filter
 #' @param k \code{character} value: \code{gaussian} for Gaussian kernel, \code{LoG} for Laplacian of Gaussian kernel, \code{sharpen} for
@@ -55,7 +55,7 @@ convKernel <- function(sigma = 1.4, k = c('gaussian','LoG','sharpen','laplacian'
 #' the function \code{\link{convKernel}}. Not square matrices or matrices with even number of rows/columns will exit an error.
 #' @return An object with the same size of \code{x} containing data processed by convolution kernel
 #' @import abind
-#' @useDynLib spacialfil
+#' @useDynLib spatialfil
 #' @export
 applyFilter <- function(x, kernel) {
   # check the k entry

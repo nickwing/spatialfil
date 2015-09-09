@@ -2,7 +2,7 @@
 % Please edit documentation in R/convK.R
 \name{convKernel}
 \alias{convKernel}
-\title{Function for creating convolution kernel for Gaussian and Laplacian of Gaussian (LoG) filter}
+\title{Function for creating convolution kernel for different filters}
 \usage{
 convKernel(sigma = 1.4, k = c("gaussian", "LoG", "sharpen", "laplacian",
   "emboss", "sobel"))

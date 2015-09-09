@@ -9,3 +9,4 @@ Description: This package is aimed to filtering two (or three) dimensional data 
   By the moment only Gaussian and Laplacian of Gaussian (LoG) kernels have been implemented
 License: GPL-2
 LazyData: TRUE
+Depends: R (>= 3.1.0), abind
