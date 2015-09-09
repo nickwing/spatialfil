@@ -4,17 +4,19 @@
 \alias{convKernel}
 \title{Function for creating convolution kernel for Gaussian and Laplacian of Gaussian (LoG) filter}
 \usage{
-convKernel(sigma = 1.4, k = c("gaussian", "LoG", "sharpen", "edge"))
+convKernel(sigma = 1.4, k = c("gaussian", "LoG", "sharpen", "laplacian",
+  "emboss", "sobel"))
 }
 \arguments{
 \item{sigma}{The \code{numeric} value of standard deviation for the Gaussian or LoG filter}
 
 \item{k}{\code{character} value: \code{gaussian} for Gaussian kernel, \code{LoG} for Laplacian of Gaussian kernel, \code{sharpen} for
-3x3 convolution matrix for sharping the edges and \code{edge} for a 3x3 convolution matrix to trace the edges}
+3x3 convolution matrix for sharpening edges, \code{laplacian} for a 3x3 convolution matrix that enhance the edges and \code{emboss} for a 3x3 kernel that
+draws edges as embossed image, \code{sobel} gives only one of the two matrices needed to apply the Sobel filter}
 }
 \value{
-A matrix with convolution kernel with size varying according the value of \code{sigma} in case of
-\code{gaussian} or \code{LoG} option selected
+An object of class \code{convKern} with the \code{matrix} of convolution kernel whose size varies according the value of \code{sigma} (in case of
+\code{gaussian} or \code{LoG} option selected), and \code{k} being the convolution kernel type label
 }
 \description{
 This function creates the convolution kernel for applying a filter to an array/matrix
@@ -26,8 +28,10 @@ the data. \emph{Gaussian}  kernel is calculated starting from the 2 dimension, i
 a second derivative to enhance regions of rapid intensity changes:
 \deqn{LoG\left ( x,y \right )=\frac{-1}{\pi\sigma^{4}}\left ( 1-\frac{x^{2}+y^{2}}{2\sigma^{2}}\right ) e^{-\frac{x^{2}+y^{2}}{2\sigma^{2}}}} the use of the underlying Gaussian kernel (so the name
 Laplacian of Gaussian or \emph{LoG}) is needed to reduce the effect of high frequency noise that can affect the signal
-distribution. \emph{Edge} kernel is a 3x3 cnvolution kernel used to enhance the edges of the matrix. \emph{Sharpen} enhance the detail
-(but also the noise) in original dataset
+distribution. \emph{Laplacian} is a \emph{Sharpen} enhance the detail. \emph{Emboss} kernel is a 3x3 convolution kernel that embosses the edges.
+(but also the noise) in original dataset. \emph{Sobel} convolution kernel returns the possibility to detect edges in a more sofisticated
+way, the \code{convKernel} function returns only one of the two matrices need to apply the filter. The second one is calculated
+by transposing the returned matrix in the other needed one.
 }
 \examples{
 # creates a convolution kernel with Gaussian function and sigma = 1.4
