@@ -3,10 +3,9 @@ Type: Package
 Title: Package for applying 2D convolution kernel filters to matrices or arrays
 Version: 0.1
 Date: 2015-09-08
-Author: Nicola Dinapoli
+Author: Nicola Dinapoli, Roberto Gatta
 Maintainer: Nicola Dinapoli <nicola.dinapoli@rm.unicatt.it>
-Description: This package is aimed to filtering two (or three) dimensional data using different convolution kernels.
-  By the moment only Gaussian and Laplacian of Gaussian (LoG) kernels have been implemented
+Description: spatialfil is a package aimed to filtering two (or three) dimensional data using different convolution kernels.
 License: GPL-2
 LazyData: TRUE
 Depends: R (>= 3.1.0), abind
