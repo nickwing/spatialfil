@@ -11,8 +11,8 @@
 #' Laplacian of Gaussian or \emph{LoG}) is needed to reduce the effect of high frequency noise that can affect the signal
 #' distribution. \emph{Edge} kernel is a 3x3 cnvolution kernel used to enhance the edges of the matrix. \emph{Sharpen} enhance the detail
 #' (but also the noise) in original dataset
-#' @return A matrix with convolution kernel with size varying according the value of \code{sigma} in case of
-#' \code{gaussian} or \code{LoG} option selected
+#' @return An object of class \code{convKern} with the \code{matrix} of convolution kernel whose size varies according the value of \code{sigma} (in case of
+#' \code{gaussian} or \code{LoG} option selected), and \code(k) being the convolution kernel type label
 #' @export
 #' @examples # creates a convolution kernel with Gaussian function and sigma = 1.4
 #'  K <- convKernel(sigma = 1.4, k = 'gaussian')
@@ -31,8 +31,11 @@ convKernel <- function(sigma = 1.4, k = c('gaussian','LoG','sharpen','edge')) {
     M <- outer(X = x, Y = y, FUN = function(X, Y) return(-1/(pi*sigma^4)*(1-(X^2+Y^2)/(2*sigma^2))*exp(-(X^2+Y^2)/(2*sigma^2))))
 
   if (k=='sharpen') M <- matrix(data = c(0,-1,0,-1,5,-1,0,-1,0), nrow = 3)
-  if (k=='edge') M <- matrix(data = c(0,1,0,1,-4,1,0,1,0), nrow = 3)
-  return(M)
+  if (k=='laplacian') M <- matrix(data = c(0,1,0,1,-4,1,0,1,0), nrow = 3)
+  # create S3 class
+  output <- list('matrix' = M, 'kernel' = k)
+  class(output) <- 'convKern'
+  return(output)
 }
 
 
@@ -50,9 +53,11 @@ convKernel <- function(sigma = 1.4, k = c('gaussian','LoG','sharpen','edge')) {
 #' @useDynLib spacialfil
 #' @export
 applyFilter <- function(x, kernel) {
+  # check the k entry
+  if (class(kernel)!='convKern') stop('kernel MUST be a convKern class object')
   # prepare matrix if x is matrix by adding required extra lines
   # number of extralines to be added to matrix and arrays (extraplanes)
-  extralines <- dim(kernel)[1] %/% 2
+  extralines <- dim(kernel$matrix)[1] %/% 2
   # now resizes array or matrix adding as new extralines (or planes) as the length
   # of half side of kernel - 1 (the center pixel)
   if (class(x)=='matrix') {
@@ -73,7 +78,7 @@ applyFilter <- function(x, kernel) {
     for (m in -extralines:extralines)  # index for rows
       kindex <- c(kindex, n*Nrow + m)
 
-  result <- .C('applyKernel', as.double(x), as.double(kernel), as.integer(extralines), as.integer(kindex),
+  result <- .C('applyKernel', as.double(x), as.double(kernel$matrix), as.integer(extralines), as.integer(kindex),
                as.integer(Nrow), as.integer(Ncol), as.integer(Nslices), as.double(dataOutput))
   if (class(x)=='matrix') {
     output <- matrix(data = result[[8]], nrow = Nrow)
