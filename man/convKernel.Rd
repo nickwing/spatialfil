@@ -10,9 +10,14 @@ convKernel(sigma = 1.4, k = c("gaussian", "LoG", "sharpen", "laplacian",
 \arguments{
 \item{sigma}{The \code{numeric} value of standard deviation for the Gaussian or LoG filter}
 
-\item{k}{\code{character} value: \code{gaussian} for Gaussian kernel, \code{LoG} for Laplacian of Gaussian kernel, \code{sharpen} for
-3x3 convolution matrix for sharpening edges, \code{laplacian} for a 3x3 convolution matrix that enhance the edges and \code{emboss} for a 3x3 kernel that
-draws edges as embossed image, \code{sobel} gives only one of the two matrices needed to apply the Sobel filter}
+\item{k}{\code{character} value: \itemize{
+\item \code{gaussian} for Gaussian kernel
+\item \code{LoG} for Laplacian of Gaussian kernel
+\item \code{sharpen} for 3x3 convolution matrix for sharpening edges
+\item \code{laplacian} for a 3x3 convolution matrix that enhances the edges
+\item \code{emboss} for a 3x3 kernel that draws edges as embossed image
+\item \code{sobel} gives one of the two 3x3 matrices needed to apply the Sobel filter
+}}
 }
 \value{
 An object of class \code{convKern} with the \code{matrix} of convolution kernel whose size varies according the value of \code{sigma} (in case of
@@ -30,7 +35,7 @@ a second derivative to enhance regions of rapid intensity changes:
 Laplacian of Gaussian or \emph{LoG}) is needed to reduce the effect of high frequency noise that can affect the signal
 distribution. \emph{Laplacian} is a \emph{Sharpen} enhance the detail. \emph{Emboss} kernel is a 3x3 convolution kernel that embosses the edges.
 (but also the noise) in original dataset. \emph{Sobel} convolution kernel returns the possibility to detect edges in a more sofisticated
-way, the \code{convKernel} function returns only one of the two matrices need to apply the filter. The second one is calculated
+way, the \code{convKernel} function returns only one of the two matrices needed to apply the filter. The second one is calculated
 by transposing the returned matrix in the other needed one.
 }
 \examples{
@@ -39,5 +44,15 @@ by transposing the returned matrix in the other needed one.
 K <- convKernel(sigma = 1.4, k = 'gaussian')
 plot(K)
 ## End(**Not run**)
+}
+\references{
+\itemize{
+\item \code{gaussian} kernel  \url{http://homepages.inf.ed.ac.uk/rbf/HIPR2/gsmooth.htm}
+\item \code{LoG} kernel: \url{http://homepages.inf.ed.ac.uk/rbf/HIPR2/log.htm}
+\item \code{sharpen} kernel: \url{https://en.wikipedia.org/wiki/Kernel_(image_processing)}
+\item \code{laplacian} kernel: \url{https://en.wikipedia.org/wiki/Discrete_Laplace_operator}
+\item \code{emboss} kernel: \url{http://coding-experiments.blogspot.it/2010/07/convolution.html}
+\item \code{sobel} kernel: \url{https://en.wikipedia.org/wiki/Sobel_operator}
+}
 }
 
