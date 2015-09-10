@@ -8,4 +8,4 @@ Maintainer: Nicola Dinapoli <nicola.dinapoli@rm.unicatt.it>
 Description: spatialfil is a package aimed to filtering two (or three) dimensional data using different convolution kernels.
 License: GPL-2
 LazyData: TRUE
-Depends: R (>= 3.1.0), abind
+Depends: R (>= 3.1.0), abind, fields

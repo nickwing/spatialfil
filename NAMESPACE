@@ -2,5 +2,8 @@
 
 export(applyFilter)
 export(convKernel)
+export(plot.convKern)
+export(print.convKern)
 import(abind)
+import(fields)
 useDynLib(spatialfil)

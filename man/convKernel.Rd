@@ -34,7 +34,10 @@ way, the \code{convKernel} function returns only one of the two matrices need to
 by transposing the returned matrix in the other needed one.
 }
 \examples{
+## Not run:
 # creates a convolution kernel with Gaussian function and sigma = 1.4
- K <- convKernel(sigma = 1.4, k = 'gaussian')
+K <- convKernel(sigma = 1.4, k = 'gaussian')
+plot(K)
+## End(**Not run**)
 }
 

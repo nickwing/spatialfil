@@ -17,8 +17,11 @@
 #' @return An object of class \code{convKern} with the \code{matrix} of convolution kernel whose size varies according the value of \code{sigma} (in case of
 #' \code{gaussian} or \code{LoG} option selected), and \code{k} being the convolution kernel type label
 #' @export
-#' @examples # creates a convolution kernel with Gaussian function and sigma = 1.4
-#'  K <- convKernel(sigma = 1.4, k = 'gaussian')
+#' @examples ## Not run:
+#' # creates a convolution kernel with Gaussian function and sigma = 1.4
+#' K <- convKernel(sigma = 1.4, k = 'gaussian')
+#' plot(K)
+#' ## End(**Not run**)
 convKernel <- function(sigma = 1.4, k = c('gaussian','LoG','sharpen','laplacian','emboss','sobel')) {
   k <- match.arg(k)
   l <- sigma * 7
@@ -43,6 +46,28 @@ convKernel <- function(sigma = 1.4, k = c('gaussian','LoG','sharpen','laplacian'
   return(output)
 }
 
+#' \code{print} method for class \code{convKern}
+#' @param x An object of \code{convKern} class
+#' @param ... further arguments to pass to \code{print} method
+#' @export print.convKern
+print.convKern <- function(x, ...) {
+    cat('\nConvolution Kernel:', x$kernel)
+    cat('\n\nConvolution Matrix:\n')
+    print(x$matrix)
+}
+
+
+#' \code{plot} method for class \code{convKern}
+#' @param x An object of \code{convKern} class
+#' @param ... further arguments to pass to \code{plot} method
+#' @export plot.convKern
+#' @import fields
+plot.convKern <- function(x, ...) {
+  col1 <- colorRampPalette(c('black', 'midnightblue', 'darkblue','dodgerblue', 'forestgreen', 'darkolivegreen1', 'gold1', 'orange', 'red'))
+  ncolors <- 1000  
+  image.plot(x$matrix, col = col1(ncolors), main = paste('Kernel:', x$kernel))  
+}
+
 
 #' Function for applying convolution kernel to a matrix or array
 #' @description This function applies the a convolution kernel based filter to a \code{matrix} or \code{array} object type.
@@ -57,6 +82,17 @@ convKernel <- function(sigma = 1.4, k = c('gaussian','LoG','sharpen','laplacian'
 #' @import abind
 #' @useDynLib spatialfil
 #' @export
+#' @examples ## Not run:
+#' M <- array(runif(1000000), dim = c(100,100,100))
+#' # smooth the array M
+#' Mfil <- applyFilter(x = M, kernel = convKernel(sigma = 1.4, k = 'gaussian'))
+#' image(M[,,50], col = grey(1:1000/1000))
+#' image(Mfil[,,50], col = grey(1:1000/1000))
+#' 
+#' # now combining two filters in cascade
+#' Mfil <- applyFilter(x = applyFilter(x = M, kernel = convKernel(k = 'sobel')), kernel = convKernel(sigma = 1.4, k = 'gaussian'))
+#' image(Mfil[,,50], col = grey(1:1000/1000))
+#' ## End(**Not run**)
 applyFilter <- function(x, kernel) {
   # check the k entry
   if (class(kernel)!='convKern') stop('kernel MUST be a convKern class object')
